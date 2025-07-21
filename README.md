@@ -1,7 +1,7 @@
 # ExperimentalCode
 This photovoltaic power prediction code base only retains part of the key experimental code at present, and the detailed and complete code will be uploaded after the paper is published.
 ## File Description
-### 1. ceemdan.py
+### 1. ceemdan_sst.py
 Implements the Complete Ensemble Empirical Mode Decomposition with Adaptive Noise (CEEMDAN) algorithm, commonly used for non-stationary signal processing. It decomposes complex signals into several Intrinsic Mode Functions (IMFs) to facilitate subsequent analysis of the time-frequency characteristics of signals and feature extraction.
 ### 2. correlation.py
 Focuses on correlation analysis, capable of calculating linear or non-linear correlation relationships between variables. It supports methods such as Pearson correlation coefficient and Spearman rank correlation, used to explore the degree of association between data features and assist in feature selection and data analysis workflows.
