@@ -47,10 +47,10 @@ def sst_postprocess(imfs):
 # IMFs
 def select_imfs_by_correlation(imfs, signal, threshold=0.1):
     selected_imfs = []
-    min_length = min(imfs.shape[1], len(signal))  # 取最小长度
-    signal = signal[:min_length]  # 截断 signal
+    min_length = min(imfs.shape[1], len(signal))  
+    signal = signal[:min_length]  
     for i, imf in enumerate(imfs):
-        imf = imf[:min_length]  # 截断 imf
+        imf = imf[:min_length]  
         corr = np.corrcoef(imf, signal)[0, 1]
         if abs(corr) > threshold:
             selected_imfs.append(imf)
@@ -123,17 +123,14 @@ def main():
         try:
             with Pool(processes=len(signal_chunks)) as pool:
                 results = pool.map(ceemdan_decompose, signal_chunks)
-            # 拼接 IMFs 并补齐长度
             total_length = sum(len(chunk) for chunk in signal_chunks)
             imfs = np.concatenate(results, axis=1)
             if imfs.shape[1] != len(signal):
                 print(f"Warning: IMFs length ({imfs.shape[1]}) does not match signal length ({len(signal)}). Adjusting...")
                 if imfs.shape[1] < len(signal):
-                    # 补齐 IMFs 长度
                     padding = np.zeros((imfs.shape[0], len(signal) - imfs.shape[1]))
                     imfs = np.concatenate((imfs, padding), axis=1)
                 else:
-                    # 截断 IMFs 长度
                     imfs = imfs[:, :len(signal)]
         except Exception as e:
             print(f"Multiprocessing failed: {e}")
