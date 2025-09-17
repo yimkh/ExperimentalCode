@@ -71,6 +71,26 @@ Focuses on correlation analysis, capable of calculating linear or non-linear cor
 - **Visualization**:  Heatmap saved as `correlation_heatmap.png` (300 dpi, suitable for publication-quality figures).
 ### 3. clustering.py
 
+### 1. Input Data
+
+- **File format**: Excel (`.xlsx`)  
+- **Default file**: `data.xlsx`  
+- **Required columns (Chinese, automatically renamed into English):**
+  - 光伏有功功率 → `PV_Active_Power`
+  - 温度 → `Temperature`
+  - 湿度 → `Humidity`
+  - 全球水平辐射 → `Global_Horizontal_Irradiance`
+  - 散射水平辐射 → `Diffuse_Horizontal_Irradiance`
+  - 风向 → `Wind_Direction`
+  - 日降水量 → `Daily_Precipitation`
+  - 倾斜面全球辐射 → `Tilted_Global_Irradiance`
+  - 倾斜面散射辐射 → `Tilted_Diffuse_Irradiance`
+
+**Example input (`data.xlsx`):**
+```csv
+timestamp,光伏有功功率,温度,湿度,全球水平辐射,散射水平辐射,风向,日降水量,倾斜面全球辐射,倾斜面散射辐射
+2025-01-01 00:00:00,123.4,18.5,70,420,180,90,0,350,160
+2025-01-01 00:05:00,125.1,18.7,71,425,182,92,0,352,161
 
 ### 4. pv_wgan_gp.py
 Implements the Wasserstein Generative Adversarial Network (WGAN) with Gradient Penalty (GP) for the photovoltaic (PV) scenario data. It can be used to generate realistic PV power sequences and perform data augmentation, assisting in PV power forecasting, scenario simulation, and other tasks to alleviate issues of data scarcity or insufficient diversity.
