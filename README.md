@@ -39,7 +39,7 @@ timestamp,PV_Active_Power
 - **Figures**
   - `imf_plots/full/full_segment_1.png`: segmented plots of all IMFs  
   - `imf_plots/selected/selected_segment_1.png`: segmented plots of selected IMFs  
-**Example output (CSV):**
+- **Example output (CSV):**
 ```csv
 IMF1,IMF2,IMF3,IMF4
 0.23,0.02,-0.15,0.00
