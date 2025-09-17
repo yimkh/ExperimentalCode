@@ -69,20 +69,62 @@ Focuses on correlation analysis, capable of calculating linear or non-linear cor
 #### Output
 - **Terminal output**: sorted correlation coefficients with respect to `PV_Active_Power`.  
 - **Visualization**:  Heatmap saved as `correlation_heatmap.png` (300 dpi, suitable for publication-quality figures).
-### 3. pv_wgan_gp.py
+### 3. clustering.py
+
+
+### 4. pv_wgan_gp.py
 Implements the Wasserstein Generative Adversarial Network (WGAN) with Gradient Penalty (GP) for the photovoltaic (PV) scenario data. It can be used to generate realistic PV power sequences and perform data augmentation, assisting in PV power forecasting, scenario simulation, and other tasks to alleviate issues of data scarcity or insufficient diversity.
-### Input Data
+#### Input Data
 - **File format**: Excel (`.xlsx`)  
 - **Default path**: `data.xlsx`  
 - **Required columns** (example: `Temperature`):
   - `timestamp` (format: `YYYY-MM-DD HH:MM:SS`)  
   - One target variable column (default = `"Temperature"`)  
-**Example input:**
+- **Example input:**
 ```csv
 timestamp,Temperature
 2025-01-01 00:00:00,18.4
 2025-01-01 00:05:00,18.6
 2025-01-01 00:10:00,18.3
-### 4. pinn_mamba.py
+```
+#### Processing Steps
+1. **Preprocessing**
+   - Target column values are clipped at zero, then transformed with `log1p`.
+   - Data is normalized using `MinMaxScaler`.
+   - Sequences of length 20 are created, predicting the next 4 time steps.
+2. **Generator Model**
+   - Input: `(seq_length=20, feature_size=1)`
+   - BiLSTM layers: 512 → 256 units
+   - Multi-Head Attention: 8 heads, key_dim=64
+   - Dense layers with GaussianNoise
+   - Output: `(4, 1)` sequence, sigmoid-activated
+3. **Discriminator Model**
+   - Conv1D layers (32, 64, 128 filters) + LeakyReLU
+   - Dense layers with LeakyReLU
+   - Final output: scalar score
+4. **WGAN-GP Training**
+   - Loss = Wasserstein + Gradient Penalty + MSE term (λ=2.0)
+   - `n_critic = 3` updates per generator step
+   - Optimizer: Adam (`lr=1e-4, beta1=0.9, beta2=0.999`)
+   - Checkpoints saved every 15 epochs
+5. **Evaluation**
+   - Real vs Generated values rescaled back with `expm1`
+   - RMSE computed
+   - Results saved to Excel + plots saved as PNG
+#### Outputs
+- **Excel files**
+  - `Save/dataTemperature/data_Full_results.xlsx` → Real vs Generated series
+- **Figures**
+  - `loss_plot.png` → Generator & Discriminator training losses
+  - `data_Full_plot.png` → Real vs Generated time series comparison
+**Example Excel output:**
+```csv
+Timestamp,Real,Generated
+2025-01-01 00:00:00,18.4,18.3
+2025-01-01 00:05:00,18.6,18.7
+2025-01-01 00:10:00,18.3,18.4
+```
+
+### 5. pinn_mamba.py
 Combines Physics-Informed Neural Networks (PINN) with the Mamba architecture, attempting to integrate emerging efficient sequence modeling structures into physical constraint learning scenarios. It can be used for solving partial differential equations, physical system simulation, etc., leveraging data-driven methods combined with physical prior knowledge to improve the model's ability to fit and predict physical laws.
 
