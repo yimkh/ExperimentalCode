@@ -10,7 +10,7 @@ Implements the Complete Ensemble Empirical Mode Decomposition with Adaptive Nois
 - **Required columns**:
   - `timestamp` (datetime, format: `YYYY-MM-DD HH:MM:SS`)
   - `PV_Active_Power` (float, active power of PV system)
-**Example input:**
+#### Example input:
 ```csv
 timestamp,PV_Active_Power
 2025-01-01 00:00:00,123.4
