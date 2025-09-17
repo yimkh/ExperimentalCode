@@ -46,7 +46,30 @@ IMF1,IMF2,IMF3,IMF4
 0.21,0.03,-0.14,0.01
 ```
 ### 2. correlation.py
-Focuses on correlation analysis, capable of calculating linear or non-linear correlation relationships between variables. 
+Focuses on correlation analysis, capable of calculating linear or non-linear correlation relationships between variables.
+#### Input
+- **File format**: Excel (`.xlsx`)  
+- **Default file path**: `data.xlsx`  
+- **Required columns:**
+  - `PV_Active_Power`
+  - `Temperature`
+  - `Humidity`
+  - `Global_Horizontal_Irradiance`
+  - `Diffuse_Horizontal_Irradiance`
+  - `Wind_Direction`
+  - `Daily_Precipitation`
+  - `Tilted_Global_Irradiance`
+  - `Tilted_Diffuse_Irradiance`
+#### Processing Steps
+1. Read the Excel file (`pandas.read_excel`).  
+2. Rename original Chinese column names into English for consistency.  
+3. Compute a correlation matrix across all selected features.  
+4. Extract and sort correlations between each variable and `PV_Active_Power`.  
+5. Plot the correlation matrix as a heatmap using **seaborn** and **matplotlib**.
+#### Output
+- **Terminal output**: sorted correlation coefficients with respect to `PV_Active_Power`.  
+- **Visualization**:  
+  - Heatmap saved as `correlation_heatmap.png` (300 dpi, suitable for publication-quality figures).  
 ### 3. pinn_mamba.py
 Combines Physics-Informed Neural Networks (PINN) with the Mamba architecture, attempting to integrate emerging efficient sequence modeling structures into physical constraint learning scenarios. It can be used for solving partial differential equations, physical system simulation, etc., leveraging data-driven methods combined with physical prior knowledge to improve the model's ability to fit and predict physical laws.
 ### 4. pv_wgan_gp.py
