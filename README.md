@@ -1,8 +1,21 @@
 # ExperimentalCode
 This photovoltaic power prediction code base only retains part of the key experimental code at present, and the detailed and complete code will be uploaded after the paper is published.
+
 ## File Description
 ### 1. ceemdan_sst.py
 Implements the Complete Ensemble Empirical Mode Decomposition with Adaptive Noise (CEEMDAN) algorithm, commonly used for non-stationary signal processing. It decomposes complex signals into several Intrinsic Mode Functions (IMFs) to facilitate subsequent analysis of the time-frequency characteristics of signals and feature extraction.
+#### Input Data
+- **Default path**: `data.csv` (modifiable inside the script)
+- **Format**: CSV
+- **Required columns**:
+  - `timestamp` (datetime, format: `YYYY-MM-DD HH:MM:SS`)
+  - `PV_Active_Power` (float, active power of PV system)
+**Example input:**
+```csv
+timestamp,PV_Active_Power
+2025-01-01 00:00:00,123.4
+2025-01-01 00:05:00,120.8
+2025-01-01 00:10:00,118.7
 ### 2. correlation.py
 Focuses on correlation analysis, capable of calculating linear or non-linear correlation relationships between variables. 
 ### 3. pinn_mamba.py
