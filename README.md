@@ -17,11 +17,11 @@ timestamp,PV_Active_Power
 2025-01-01 00:05:00,120.8
 2025-01-01 00:10:00,118.7
 ```
-### Preprocessing
+#### Preprocessing
 - Missing/Inf values → interpolated and backfilled  
 - All-NaN signals → forced to 0.0  
 - Zero-variance signals → small Gaussian noise is added to ensure decomposability  
-### Decomposition Workflow
+#### Decomposition Workflow
 1. **CEEMDAN decomposition**
    - Parameters: `trials=20`, `max_imf=8`  
    - Minimum segment length: 500 points  
@@ -32,7 +32,7 @@ timestamp,PV_Active_Power
 3. **IMF selection**
    - Correlation threshold: `|corr| > 0.1` → retain IMF  
    - Energy ratio threshold: `> 0.01` → retain IMF  
-### Output Results
+#### Output Results
 - **CSV files**
   - `imfs_full_refined.csv`: all refined IMFs  
   - `selected_imfs.csv`: selected IMFs after filtering  
@@ -44,7 +44,7 @@ timestamp,PV_Active_Power
 IMF1,IMF2,IMF3,IMF4
 0.23,0.02,-0.15,0.00
 0.21,0.03,-0.14,0.01
-...
+```
 ### 2. correlation.py
 Focuses on correlation analysis, capable of calculating linear or non-linear correlation relationships between variables. 
 ### 3. pinn_mamba.py
