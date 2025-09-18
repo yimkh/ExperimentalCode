@@ -256,3 +256,37 @@ index,true,predicted
 2,128.77,128.60
 ```
 
+## Dependencies
+- Python >= 3.8  
+- Common libraries: `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`  
+- Clustering: `hdbscan`, `umap-learn`  
+- Data augmentation: `tensorflow >= 2.8`  
+- Forecasting: `torch`, `mamba-ssm`  
+- Decomposition: `PyEMD`, `ssqueezepy`  
+
+## How to Run
+Run each stage independently like:
+```csv
+python pinn_mamba.py
+```
+
+## Key Parameters
+
+| Script         | Parameter       | Default | Description              |
+|----------------|----------------|---------|--------------------------|
+| `wgan_gp.py`   | `seq_length`   | 20      | Input sequence length    |
+|                | `output_length`| 4       | Forecast horizon         |
+|                | `epoch`        | 60      | Training epochs          |
+| `pinn_mamba.py`| `SEQ_LEN`      | 10      | Time window size         |
+|                | `PRED_LEN`     | 1       | Prediction horizon       |
+|                | `BATCH_SIZE`   | 64      | Training batch size      |
+|                | `EPOCHS`       | 50      | Max training epochs      |
+|                | `LAMBDA_PHY`   | 0.1     | Physics loss weight      |
+
+## Reproducibility Notes
+
+- All scripts expect input files in the **current directory** (`data.csv` or `data.xlsx`).  
+- Outputs are written into organized subfolders (`results/`, `checkpoints/`, `imf_plots/`, etc.).  
+- GPU is strongly recommended for WGAN-GP and PINN-Mamba.  
+- Random seeds (`np.random.seed(42)`) are fixed where applicable.  
+- Figures use **Times New Roman** font and 300 dpi, suitable for publication.  
