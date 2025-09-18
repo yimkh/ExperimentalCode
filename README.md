@@ -201,10 +201,9 @@ timestamp,PV_Active_Power,Temperature,Humidity,Global_Horizontal_Radiation,Diffu
 ```
 #### Processing Steps
 1. **Lag construction**  
-   - Build lag features `PV_Lag_1..10`  
-   - Drop initial NaN rows  
+   - Build features `PV_Lag_1..10`  
 2. **Feature set**  
-   - Combine meteorological variables + CEEMDAN IMFs + lag features  
+   - Combine meteorological variables + CEEMDAN IMFs + features  
    - Target variable: `PV_Active_Power`  
 3. **Scaling**  
    - Apply `MinMaxScaler` to `X` and `y`  
