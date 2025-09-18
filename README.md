@@ -182,4 +182,78 @@ Timestamp,Real,Generated
 
 ### 5. pinn_mamba.py
 Combines Physics-Informed Neural Networks (PINN) with the Mamba architecture, attempting to integrate emerging efficient sequence modeling structures into physical constraint learning scenarios. It can be used for solving partial differential equations, physical system simulation, etc., leveraging data-driven methods combined with physical prior knowledge to improve the model's ability to fit and predict physical laws.
+#### Input Data
+
+- **File**: `data.csv`
+- **Required columns** (minimum):
+  - `timestamp` (`YYYY-MM-DD HH:MM:SS`)
+  - `PV_Active_Power`
+  - Meteorology: `Temperature`, `Humidity`,
+    `Global_Horizontal_Radiation`, `Diffuse_Horizontal_Radiation`,
+    `Tilted_Global_Radiation`, `Tilted_Diffuse_Radiation`
+  - CEEMDAN IMFs: `imfs0`, `imfs1`, `imfs2`, `imfs3`, `imfs4`
+- **Lag features**: the script auto-creates `PV_Lag_1 … PV_Lag_10` from `PV_Active_Power`. :contentReference[oaicite:2]{index=2}
+**Example rows (`data.csv`):**
+```csv
+timestamp,PV_Active_Power,Temperature,Humidity,Global_Horizontal_Radiation,Diffuse_Horizontal_Radiation,Tilted_Global_Radiation,Tilted_Diffuse_Radiation,imfs0,imfs1,imfs2,imfs3,imfs4
+2025-01-01 00:00:00,123.4,18.5,70,420,180,350,160,0.12,-0.03,0.07,0.01,-0.02
+2025-01-01 00:05:00,125.1,18.7,71,425,182,352,161,0.11,-0.02,0.06,0.02,-0.01
+```
+#### Processing Steps
+1. **Lag construction**  
+   - Build lag features `PV_Lag_1..10`  
+   - Drop initial NaN rows  
+2. **Feature set**  
+   - Combine meteorological variables + CEEMDAN IMFs + lag features  
+   - Target variable: `PV_Active_Power`  
+3. **Scaling**  
+   - Apply `MinMaxScaler` to `X` and `y`  
+   - Split into **80% training / 20% validation**  
+4. **Windowing**  
+   - Sliding windows with `SEQ_LEN = 10` and `PRED_LEN = 1`  
+5. **Model**  
+   - Input → Linear projection  
+   - **N × Mamba layers** (default 4)  
+     - Each block: LayerNorm → Mamba → Dropout → Residual connection  
+   - MLP head  
+   - Final embedding from the **last time step** used for 1-step prediction  
+6. **Loss function**  
+   - `Total Loss = MSE(pred, y) + λ * physics_loss`  
+   - Physics loss:  
+     - `eta_temp = 1 - 0.004 * (T - 25)`  
+     - `eta_humid = 1 - 0.002 * |H - 50|`  
+     - `pv_theory = G_tilted * eta_temp * eta_humid`  
+     - `physics_loss = MSE(pred, pv_theory)`  
+   - Default λ = 0.1  
+7. **Training loop**  
+   - Optimizer: Adam (`lr = 1e-4`)  
+   - Learning rate scheduler: `ReduceLROnPlateau`  
+   - EarlyStopping (`patience = 20`, `min_delta = 1e-4`)  
+8. **Checkpointing**  
+   - Save best model (lowest validation RMSE) to:  
+     ```
+     checkpoints/mamba_best_<timestamp>.pth
+     ```  
+#### Outputs
+- **Checkpoints**
+  - `checkpoints/mamba_best_<timestamp>.pth` → best model (selected by lowest validation RMSE)
+- **CSV results**
+  - `train_prediction.csv`
+  - `val_prediction.csv`  
+  Each file has the format:index,true,predicted
+
+- **Figures** (publication-ready, Times New Roman, 300 dpi)
+- Segment plots (per 1000 points) under:
+  - `data/3.0/Train/`
+  - `data/3.0/Validation/`
+- `results/plots/mamba_true_vs_pred.png` → True vs Predicted (first 2000 points)
+- `results/plots/mamba_residual_hist_kde.png` → Residual histogram + KDE
+- `results/plots/mamba_residual_over_time.png` → Residual time series
+**Example of `val_prediction.csv`:**
+```csv
+index,true,predicted
+0,132.41,129.87
+1,130.02,130.55
+2,128.77,128.60
+```
 
