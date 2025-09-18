@@ -257,11 +257,11 @@ index,true,predicted
 ```
 
 ## Dependencies
-- Python >= 3.8  
+- Python >= 3.10
 - Common libraries: `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`  
 - Clustering: `hdbscan`, `umap-learn`  
 - Data augmentation: `tensorflow >= 2.8`  
-- Forecasting: `torch`, `mamba-ssm`  
+- Forecasting: `torch > 2.3`, `mamba-ssm = 1.2.0`  
 - Decomposition: `PyEMD`, `ssqueezepy`  
 
 ## How to Run
