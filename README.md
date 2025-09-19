@@ -207,7 +207,6 @@ timestamp,PV_Active_Power,Temperature,Humidity,Global_Horizontal_Radiation,Diffu
    - Target variable: `PV_Active_Power`  
 3. **Scaling**  
    - Apply `MinMaxScaler` to `X` and `y`  
-   - Split into **80% training / 20% validation**  
 4. **Windowing**  
    - Sliding windows with `SEQ_LEN = 10` and `PRED_LEN = 1`  
 5. **Model**  
